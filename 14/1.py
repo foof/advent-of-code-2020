@@ -11,9 +11,8 @@ for line in data:
         zeromask = eval('0b{}'.format(val.replace('1', 'X').replace('X','1')))
         onemask = eval('0b{}'.format(val.replace('0', 'X').replace('X','0')))
 
-    if (op[:3] == 'mem'):
-        address = int(op[4:].rstrip(']'))
-        val = (int(val) | onemask) & zeromask
-        mem[address] = val
+    if (op.startswith('mem')):
+        address = int(op[4:-1])
+        mem[address] = (int(val) | onemask) & zeromask
 
 print(sum(mem.values()))

@@ -14,9 +14,8 @@ for line in data:
         zeromask = eval('0b{}'.format(val.replace('1', 'X').replace('X','1')))
         onemask = eval('0b{}'.format(val.replace('0', 'X').replace('X','0')))
 
-    if (op[:3] == 'mem'):
-        val = int(val)
-        masked_address = int(op[4:].rstrip(']')) | onemask
+    if (op.startswith('mem')):
+        masked_address = int(op[4:-1]) | onemask
 
         xs = [idx for idx,c in enumerate(mask[::-1]) if c == 'X'] # Get the indices of all Xs
         pairs = [[0, 1] for i in range(len(xs))] # Generate x number of [0,1] pairs where x is the number of Xs in the mask
@@ -31,8 +30,7 @@ for line in data:
                 else:
                     zero_address_mask |= 2**xs[j]
 
-            zero_address_mask = ~zero_address_mask
-            new_address = (masked_address | one_address_mask) & zero_address_mask
-            mem[new_address] = val
+            new_address = (masked_address | one_address_mask) & ~zero_address_mask
+            mem[new_address] = int(val)
 
 print(sum(mem.values()))

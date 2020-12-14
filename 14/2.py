@@ -4,14 +4,12 @@ data = open('./data', 'r').read().splitlines()
 
 mem = {}
 mask = None
-zeromask = 0
 onemask = 1
 for line in data:
     op,val = line.split(' = ')
 
     if (op == 'mask'):
         mask = val
-        zeromask = eval('0b{}'.format(val.replace('1', 'X').replace('X','1')))
         onemask = eval('0b{}'.format(val.replace('0', 'X').replace('X','0')))
 
     if (op.startswith('mem')):

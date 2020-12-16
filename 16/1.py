@@ -3,18 +3,16 @@ valid = []
 other = []
 
 with open('./data', 'r') as f:
-    one, my_t, nearby_t = f.read().split("\n\n")
-    for line in one.split("\n"):
+    field_intervals, _, nearby_tickets = f.read().split("\n\n")
+    for line in field_intervals.split("\n"):
         key, intervals = line.split(': ')
         for interval in intervals.split(' or '):
             f, t = interval.split('-')
-            for i in range(int(f), int(t) + 1):
-                valid.append(int(i))
-    for line in nearby_t.split("\n"):
+            valid += [x for x in range(int(f), int(t) + 1)]
+    for line in nearby_tickets.split("\n"):
         if line == 'nearby tickets:':
             continue
-        for x in line.split(','):
-            other.append(int(x))
+        other = other + [int(x) for x in line.split(',')]
 
 diff = [i for i in other if i not in valid]
 

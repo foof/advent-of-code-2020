@@ -24,7 +24,6 @@ with open('./data', 'r') as f:
             other.append(ticket)
 
 keys = list(fields.keys())
-field_map = {}
 possible_keys = {}
 
 for i in range(len(keys)):

@@ -1,5 +1,6 @@
+from collections import defaultdict
 
-fields = {}
+fields = defaultdict(list)
 valid = []
 valid_tickets = []
 my_ticket = []
@@ -13,7 +14,6 @@ with open('./data', 'r') as f:
     # All valid values for each key
     for line in field_intervals.split("\n"):
         key, intervals = line.split(': ')
-        fields[key] = []
         for interval in intervals.split(' or '):
             f, t = interval.split('-')
             new_valid_fields = list(range(int(f), int(t) + 1))
@@ -30,10 +30,9 @@ with open('./data', 'r') as f:
 
 keys = list(fields.keys())
 number_of_keys = range(len(keys))
-possible_keys = {}
+possible_keys = defaultdict(list)
 
 for i in number_of_keys:
-    possible_keys[i] = []
     for key in keys:
         invalid = False
         for ticket in valid_tickets:

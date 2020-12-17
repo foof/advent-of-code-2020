@@ -1,6 +1,8 @@
-arrival = 1000390
-buses = [13,'x','x',41,'x','x','x','x','x','x','x','x','x',997,'x','x','x','x','x','x','x',23,'x','x','x','x','x','x','x','x','x','x',19,'x','x','x','x','x','x','x','x','x',29,'x',619,'x','x','x','x','x',37,'x','x','x','x','x','x','x','x','x','x',17]
-buses = [int(x) for x in buses if x != 'x']
+with open('./data', 'r') as f:
+    arrival, buses = f.read().splitlines()
+    arrival = int(arrival)
+    
+buses = [int(b) for b in buses.split(',') if b != 'x']
 
 best = None
 for bus in buses:

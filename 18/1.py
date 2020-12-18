@@ -6,7 +6,7 @@ def compute(expr):
         replacement = '%d' % eval(match.group(0))
         expr = expr.replace(match.group(0), replacement, 1)
         match = re.search(r'\d+ (\+|\*) \d+', expr)
-    return int(expr)
+    return eval(expr)
 
 def solve(expr):
     match = re.search(r'\([^\(\)]*\)', expr)

@@ -10,7 +10,7 @@ def compute(expr):
 
 def solve(expr):
     while True:
-        match = re.search(r'\([^()]*\)', expr) # Find deepest parentheses
+        match = re.search(r'\([^()]+\)', expr)
         if not match:
             break
         expr = expr.replace(match.group(0), str(compute(match.group(0)[1:-1])))

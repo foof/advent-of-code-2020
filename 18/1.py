@@ -1,19 +1,19 @@
 import re
 
 def compute(expr):
-    match = re.search(r'\d+ (\+|\*) \d+', expr)
-    while match:
-        replacement = '%d' % eval(match.group(0))
-        expr = expr.replace(match.group(0), replacement, 1)
-        match = re.search(r'\d+ (\+|\*) \d+', expr)
+    while True:
+        match = re.search(r'\d+ [+*]{1} \d+', expr)
+        if not match:
+            break
+        expr = expr.replace(match.group(0), str(eval(match.group(0))), 1)
     return eval(expr)
 
 def solve(expr):
-    match = re.search(r'\([^()]*\)', expr)
-    while match:
-        replacement = '%d' % compute(match.group(0)[1:-1])
-        expr = expr.replace(match.group(0), replacement)
-        match = re.search(r'\([^()]*\)', expr)
+    while True:
+        match = re.search(r'\([^()]+\)', expr)
+        if not match:
+            break
+        expr = expr.replace(match.group(0), str(compute(match.group(0)[1:-1])))
     return compute(expr)
 
 with open('./data', 'r') as f:

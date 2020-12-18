@@ -9,11 +9,11 @@ def compute(expr):
     return eval(expr)
 
 def solve(expr):
-    match = re.search(r'\([^\(\)]*\)', expr)
+    match = re.search(r'\([^()]*\)', expr)
     while match:
         replacement = '%d' % compute(match.group(0)[1:-1])
         expr = expr.replace(match.group(0), replacement)
-        match = re.search(r'\([^\(\)]*\)', expr)
+        match = re.search(r'\([^()]*\)', expr)
     return compute(expr)
 
 with open('./data', 'r') as f:

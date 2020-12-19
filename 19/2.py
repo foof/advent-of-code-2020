@@ -18,6 +18,7 @@ def match_list(line, start, end, rules):
     for i in range(start+1, end+1):
         if match(line, start, i, rules[0]) and match_list(line, i, end, rules[1:]):
             ret = True
+            break
 
     return ret
 
@@ -33,6 +34,7 @@ def match(line, start, end, rule):
         for option in rules[rule]:
             if match_list(line, start, end, option):
                 result = True
+                break
 
     dp[key] = result
     return result

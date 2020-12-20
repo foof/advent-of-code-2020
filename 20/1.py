@@ -48,16 +48,17 @@ tile_orientations = get_all_orientations(tiles)
 # Assumes the corners only have two possible neighbours
 def part1():
     ans = 1
+    neighbours = dict()
     for t1_id in tiles:
-        possible_neighbours = 0
+        neighbours[t1_id] = []
         t1_o = tiles[t1_id] # Doesn't matter which orientation t1 is since we compare with all orientations of t2
         other_tile_ids = [t2_id for t2_id in tile_orientations if t2_id != t1_id]
         for t2_id in other_tile_ids:
             # Check if the two tiles match in any direction and orientation
             for t2_o in tile_orientations[t2_id]:
                 if match_horizontal(t1_o, t2_o) or match_horizontal(t2_o, t1_o) or match_vertical(t1_o, t2_o) or match_vertical(t2_o, t1_o):
-                    possible_neighbours += 1
-        if possible_neighbours == 2:
+                    neighbours[t1_id].append(t2_id)
+        if len(neighbours[t1_id]) == 2:
             # If there are only two possible neighbours, we know for sure this is a corner piece
             ans *= t1_id
     return ans

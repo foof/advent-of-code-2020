@@ -145,7 +145,7 @@ for t_o in tile_orientations[tile_id]:
         break
 
 # Assemble complete image
-tile_size = 10
+tile_size = len(list(tiles.values())[0])
 image = [[] for _ in range(square_size * tile_size)]
 for row_id in range(0, square_size):
     for col_id in range(0, square_size):

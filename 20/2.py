@@ -72,7 +72,7 @@ def get_blank_puzzle(size):
     return puzzle
 puzzle = get_blank_puzzle(square_size)
 
-# Get one corner piece and it's neighbours
+# Get all corner pieces and a map of all tile's neighbours
 corners, neighbours = corners_and_neighbours()
 
 # Assemble the puzzle with the tile ids in the correct spot
@@ -85,26 +85,25 @@ while len(used_ids) < len(tiles):
     for row_id in range(0, len(puzzle)):
         for col_id in range(0, len(puzzle)):
             if puzzle[row_id][col_id]:
+                # This slot is already filled
                 continue
+
+            # Find adjacent placed tile ids
             adjacent_ids = []
             if row_id != 0:
                 adjacent_ids.append(puzzle[row_id-1][col_id])
             if col_id != 0:
                 adjacent_ids.append(puzzle[row_id][col_id-1])
-            adjacent_ids = [adjacent_id for adjacent_id in adjacent_ids if adjacent_id is not None]
+            adjacent_ids = [a_id for a_id in adjacent_ids if a_id is not None]
             
             if len(adjacent_ids) == 0:
-                # No adjacent ids
                 continue
-
             if row_id == 0 and len(adjacent_ids) == 1 and not puzzle[1][col_id-1]:
                 continue
-
             if col_id == 0 and len(adjacent_ids) == 1 and not puzzle[row_id-1][1]:
                 continue
-
             if len(adjacent_ids) == 1 and row_id != 0 and col_id != 0:
-                # require at least two adjacent ids for tiles that are not at the edges
+                # Require at least two adjacent ids for tiles that are not at the edges
                 continue
 
             n_candidates = [n for n in neighbours[adjacent_ids[0]] if n not in used_ids]
@@ -126,14 +125,17 @@ def get_solved_puzzle(start_tile):
                 continue
             for t2_o in tile_orientations[puzzle[row_id][col_id]]:
                 if col_id == 0:
+                    # If first column, match with tile above
                     if match_vertical(new_puzzle[row_id-1][col_id], t2_o):
                         new_puzzle[row_id][col_id] = t2_o
                         break
                 else:
+                    # Else just consider the tile to the left
                     if match_horizontal(new_puzzle[row_id][col_id-1], t2_o):
                         new_puzzle[row_id][col_id] = t2_o
                         break
             if not new_puzzle[row_id][col_id]:
+                # There was no matching tile orientation in this slot and therefore there is no solution
                 return False
     return new_puzzle
 
@@ -151,14 +153,10 @@ for row_id in range(0, square_size):
     for col_id in range(0, square_size):
         tile = solved_puzzle[row_id][col_id]
         for rid, row in enumerate(tile):
-            if rid == 0:
-                continue
-            if rid == len(tile)-1:
+            if rid == 0 or rid == len(tile)-1:
                 continue
             for cid, char in enumerate(row):
-                if cid == 0 :
-                    continue
-                if cid == len(row)-1:
+                if cid == 0 or cid == len(row)-1:
                     continue
                 image[(row_id*tile_size) + rid].append(char)
 
@@ -214,16 +212,14 @@ def find_seamonster(image):
                 matches.append(matching_deltas)
     return matches
 
-# Find which orientation contains sea monsters and count the remaining hashsigns
+# Find which orientation contains sea monsters and count the remaining hash signs
 for i, i_o in enumerate(image_orientations):
     seamonster_matches = find_seamonster(i_o)
     if seamonster_matches:
+        # Overwrite all hash signs that are seamonsters
         for coord_set in seamonster_matches:
             for coord in coord_set:
                 i_o[coord[0]][coord[1]] = '.'
-        ans = 0
-        for row in i_o:
-            for c in row:
-                if c == '#':
-                    ans += 1
+        # Count remaining hash signs
+        ans = sum([1 for row in i_o for c in row if c == '#'])
         print(ans)

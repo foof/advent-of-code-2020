@@ -63,7 +63,6 @@ def corners_and_neighbours():
 
     return corners, neighbours
 
-
 # Create square with empty cells
 square_size = int(math.sqrt(len(tiles)))
 def get_blank_puzzle(size):
@@ -75,15 +74,14 @@ puzzle = get_blank_puzzle(square_size)
 
 # Get one corner piece and it's neighbours
 corners, neighbours = corners_and_neighbours()
+
+# Assemble the puzzle with the tile ids in the correct spot
 corner_id = corners[0]
 used_ids = [corner_id, neighbours[corner_id][0], neighbours[corner_id][1]]
 puzzle[0][0] = corner_id
 puzzle[0][1] = neighbours[corner_id][0]
 puzzle[1][0] = neighbours[corner_id][1]
-
-count = 0
 while len(used_ids) < len(tiles):
-    count += 1
     for row_id in range(0, len(puzzle)):
         for col_id in range(0, len(puzzle)):
             if puzzle[row_id][col_id]:
@@ -118,8 +116,7 @@ while len(used_ids) < len(tiles):
                 puzzle[row_id][col_id] = n_candidates[0]
                 used_ids.append(n_candidates[0])
 
-tile_id = puzzle[0][0]
-
+# Attempts to solve the puzzle with the provided corner tile
 def get_solved_puzzle(start_tile):
     new_puzzle = get_blank_puzzle(square_size)
     new_puzzle[0][0] = start_tile
@@ -140,12 +137,14 @@ def get_solved_puzzle(start_tile):
                 return False
     return new_puzzle
 
-
+# Flip and rotate the pieces to fit a full puzzle
+tile_id = puzzle[0][0]
 for t_o in tile_orientations[tile_id]:
     solved_puzzle = get_solved_puzzle(t_o)
     if solved_puzzle:
         break
 
+# Assemble complete image
 tile_size = 10
 image = [[] for _ in range(square_size * tile_size)]
 for row_id in range(0, square_size):
@@ -163,20 +162,23 @@ for row_id in range(0, square_size):
                     continue
                 image[(row_id*tile_size) + rid].append(char)
 
+# Remove empty rows
+image = [row for row in image if len(row) > 0]
 
+# Flips an image
 def flipimage(image):
     return list(reversed(image))
 
+# Rotates an image counter-clockwise
 def rotateimage(tile):
-    # rotates tile counter-clockwise 90 degrees
     tile_size = len(tile)
     new_tile = [[] for _ in tile]
     for row in tile:
         for j, cell in enumerate(row):
             new_tile[tile_size-j-1].append(cell)
-
     return new_tile
     
+# Flip and rotate the image in all possible directions
 def all_image_orientations(image):
     res = []
     res.append(image)
@@ -187,19 +189,19 @@ def all_image_orientations(image):
         res.append(rotateimage(res[i]))
     return res
 
-image = [row for row in image if len(row) > 0]
-
 image_orientations = all_image_orientations(image)
 
+# Create a list of deltas for the seamonster
 seamonster = ['                  # ', '#    ##    ##    ###', ' #  #  #  #  #  #   ']
 seamonster_deltas = []
-seamonster_len = 20
-seamonster_height = 3
+seamonster_len = len(seamonster[0])
+seamonster_height = len(seamonster)
 for rid, row in enumerate(seamonster):
     for cid, char in enumerate(row):
         if char == '#':
             seamonster_deltas.append((rid, cid))
 
+# Finds all sea monster matches in an image and returns their coords
 def find_seamonster(image):
     matches = []
     for rid in range(0, len(image[0])-seamonster_height):
@@ -212,6 +214,7 @@ def find_seamonster(image):
                 matches.append(matching_deltas)
     return matches
 
+# Find which orientation contains sea monsters and count the remaining hashsigns
 for i, i_o in enumerate(image_orientations):
     seamonster_matches = find_seamonster(i_o)
     if seamonster_matches:

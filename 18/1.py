@@ -2,7 +2,7 @@ import re
 
 def compute(expr):
     while True:
-        match = re.search(r'\d+ [+*]{1} \d+', expr)
+        match = re.search(r'\d+ [+*] \d+', expr)
         if not match:
             break
         expr = expr[:match.start()] + str(eval(match[0])) + expr[match.end():]

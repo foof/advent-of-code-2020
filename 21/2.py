@@ -1,23 +1,22 @@
 
-possible = {}
+possible_map = {}
 
 with open('./data') as f:
     for line in f.read().split("\n"):
-        ingredients, allergens = line[0:-1].split(' (contains ')
+        ingredients, allergens = line[:-1].split(' (contains ')
         ingredients = ingredients.split(' ')
         for a in allergens.split(', '):
-            if a not in possible.keys():
-                possible[a] = ingredients
+            if a not in possible_map.keys():
+                possible_map[a] = ingredients
             else:
-                possible[a] = [i for i in ingredients if i in possible[a]]
+                possible_map[a] = [i for i in ingredients if i in possible_map[a]]
 
 final_map = {}
-while final_map.keys() < possible.keys():
-    for a in possible:
-        if len(possible[a]) == 1:
-            final_map[a] = possible[a][0]
-            for a2 in possible:
-                possible[a2] = [i for i in possible[a2] if i != final_map[a]]
+while len(final_map) < len(possible_map):
+    for a in possible_map:
+        if len(possible_map[a]) == 1:
+            final_map[a] = possible_map[a][0]
+            for a2 in possible_map:
+                possible_map[a2] = [i for i in possible_map[a2] if i != final_map[a]]
 
-ingredients = ','.join([final_map[k] for k in sorted(final_map.keys())])
-print(ingredients)
+print(','.join([final_map[k] for k in sorted(final_map.keys())]))

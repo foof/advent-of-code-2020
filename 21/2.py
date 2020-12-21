@@ -11,13 +11,13 @@ with open('./data') as f:
             else:
                 possible[a] = [i for i in ingredients if i in possible[a]]
 
-final_solution = {}
-while final_solution.keys() < possible.keys():
+final_map = {}
+while final_map.keys() < possible.keys():
     for a in possible:
         if len(possible[a]) == 1:
-            final_solution[a] = possible[a][0]
+            final_map[a] = possible[a][0]
             for a2 in possible:
-                possible[a2] = [i for i in possible[a2] if i != final_solution[a]]
+                possible[a2] = [i for i in possible[a2] if i != final_map[a]]
 
-ingredients = ','.join([final_solution[k] for k in sorted(final_solution.keys())])
+ingredients = ','.join([final_map[k] for k in sorted(final_map.keys())])
 print(ingredients)

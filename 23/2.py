@@ -106,8 +106,7 @@ def play_game(cups, rounds):
 
 with open('./data') as f:
     cups_list = [int(c) for c in f.read()]
-    for c in range(len(cups_list), 1_000_000):
-        cups_list.append(c+1)
+    cups_list += list(range(len(cups_list) + 1, 1_000_000 + 1))
 
 cups = LinkedList()
 cups.add_list(cups_list)

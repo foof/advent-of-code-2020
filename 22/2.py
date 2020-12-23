@@ -12,7 +12,7 @@ with open('./data') as f:
 
 def combat_recursive(deck_1, deck_2):
     memory = set()
-    while len(deck_1) > 0 and len(deck_2) > 0:
+    while len(deck_1) and len(deck_2):
         game_state = (tuple(deck_1), tuple(deck_2))
         if game_state in memory:
             # Player 1 wins ROUND due to repeating pattern

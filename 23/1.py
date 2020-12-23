@@ -6,14 +6,10 @@ class Node():
         self.next = next
 
 class LinkedList():
-    def __init__(self, head=None):
-        head = Node(head)
-        head.next = head
-        head.prev = head
-        self.head = head
-        self.tail = head
+    def __init__(self):
+        self.head = None
+        self.tail = None
         self.dict = {}
-        self.dict[head.value] = head
 
     def add_list(self, list):
         for value in list:
@@ -24,6 +20,9 @@ class LinkedList():
 
     def add(self, value):
         node = Node(value, self.tail, self.head)
+        if not self.head:
+            self.head = node
+            self.tail = node
         self.tail.next = node
         self.head.prev = node
         self.tail = node
@@ -37,7 +36,6 @@ class LinkedList():
 
     def set_head(self, value):
         node = self.find(value)
-        assert node
         self.head = node
         self.tail = node.prev
 
@@ -106,8 +104,8 @@ def play_game(cups, rounds):
 with open('./data') as f:
     cups_list = [int(c) for c in f.read()]
 
-cups = LinkedList(cups_list[0])
-cups.add_list(cups_list[1:])
+cups = LinkedList()
+cups.add_list(cups_list)
 
 final_cups = play_game(cups, 100)
 final_cups.set_head(1)

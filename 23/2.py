@@ -104,7 +104,6 @@ def play_game(cups, rounds):
 
     return cups
 
-
 with open('./data') as f:
     cups_list = [int(c) for c in f.read()]
     for c in range(len(cups_list), 1_000_000):

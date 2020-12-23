@@ -76,8 +76,8 @@ def play_game(cups, rounds):
 
     current_cup = cups.head
     for r in range(rounds):
-        if r % 50_000 == 0:
-            print('Round:', r)
+        if r % 500_000 == 0:
+            print('Round:', f'{r:,}')
 
         picked_up_from, picked_up_to = cups.take_next(current_cup, 3)
 

@@ -1,18 +1,16 @@
 
 with open('./data') as f:
-    keys = f.read().split("\n")
-    card_public_key = int(keys[0])
-    door_public_key = int(keys[1])
+    key1, key2 = [int(i) for i in f.read().split("\n")]
     mod = 20201227
 
 def transform(value, subject_number):
     return value * subject_number % mod
 
 value = 1
-door_loop_size = 1
-while (value := transform(value, 7)) != door_public_key:
-    door_loop_size+=1
+loop_size = 1
+while (value := transform(value, 7)) != key2:
+    loop_size+=1
 
-encryption_key = pow(card_public_key, door_loop_size, mod)
+encryption_key = pow(key1, loop_size, mod)
 
 print(encryption_key)

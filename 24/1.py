@@ -41,9 +41,5 @@ for dirs in tile_directions:
         c += deltas[dir][1]
     grid[r][c] = not grid[r][c]
 
-ans = 0
-for row in grid:
-    for cell in row:
-        if cell:
-            ans += 1
+ans = sum([1 for row in grid for cell in row if cell])
 print(ans)

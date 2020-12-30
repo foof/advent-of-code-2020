@@ -53,24 +53,26 @@ for dirs in tile_directions:
     grid[r][c] = not grid[r][c]
 
 
-for day in range(100):
-    print('day', day+1)
-    new_grid = deepcopy(grid)
-    for r, row in enumerate(grid):
-        deltas = even_deltas if r % 2 == 0 else odd_deltas
-        for c, col in enumerate(row):
-            black_neighbours = 0
-            for delta in deltas.values():
-                n_r = r+delta[0]
-                n_c = c+delta[1]
-                if n_r < 0 or n_c < 0 or n_r >= grid_size or n_c >= grid_size:
-                    # Out of bounds
-                    continue
-                if grid[n_r][n_c]:
-                    black_neighbours += 1
-            if col and not 1<=black_neighbours<=2: # Black
-                new_grid[r][c] = False
-            elif not col and black_neighbours == 2: # White
-                new_grid[r][c] = True
-    grid = new_grid
-    print(count_black(grid))
+def part2(grid):
+    for day in range(100):
+        new_grid = deepcopy(grid)
+        for r, row in enumerate(grid):
+            deltas = even_deltas if r % 2 == 0 else odd_deltas
+            for c, col in enumerate(row):
+                black_neighbours = 0
+                for delta in deltas.values():
+                    n_r = r+delta[0]
+                    n_c = c+delta[1]
+                    if n_r < 0 or n_c < 0 or n_r >= grid_size or n_c >= grid_size:
+                        # Out of bounds
+                        continue
+                    if grid[n_r][n_c]:
+                        black_neighbours += 1
+                if col and not 1<=black_neighbours<=2: # Black
+                    new_grid[r][c] = False
+                elif not col and black_neighbours == 2: # White
+                    new_grid[r][c] = True
+        grid = new_grid
+    return count_black(grid)
+
+print(part2(grid))
